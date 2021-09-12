@@ -27,7 +27,26 @@ else
     error("Expected 1 or more file paths")
 end
 
-local function reconcile(dataModel1, dataModel2)
+local function findFirstChildOfClassAndName(parent, className, name)
+    for _, child in ipairs(parent:GetChildren()) do
+        if child.ClassName == className and child.Name == name then
+            return child
+        end
+    end
+end
+
+local function reconcileChildren(parent1, parent2)
+    for _,child2 in ipairs(parent2:GetChildren()) do
+        local child1 = findFirstChildOfClassAndName(parent1, child2.ClassName, child2.Name)
+        if child1 then
+            reconcileChildren(child1, child2)
+        else
+            child2.Parent = parent1
+        end
+    end
+end
+
+local function reconcileDataModels(dataModel1, dataModel2)
     -- Transfer services if DataModel1 is missing services that DataModel2 has
     for _,service in ipairs(dataModel2:GetChildren()) do
         if not dataModel1:FindFirstChildOfClass(service.ClassName) then
@@ -39,9 +58,14 @@ local function reconcile(dataModel1, dataModel2)
         local service2 = dataModel2:FindFirstChildOfClass(service1.ClassName)
 
         if service2 then
-            for _,child in ipairs(service2:GetChildren()) do
-                if not service1:FindFirstChild(child.Name) then
-                    child.Parent = service1
+            for _,child2 in ipairs(service2:GetChildren()) do
+                local child1 = findFirstChildOfClassAndName(service1, child2.ClassName, child2.Name)
+                if child1 then
+                    print(("Child %s exists in both DataModels, reconciling children"):format(child2:GetFullName()))
+                    reconcileChildren(child1, child2)
+                else
+                    print(("Child %s does not exist in DataModel1, copying from DataModel2"):format(child2:GetFullName()))
+                    child2.Parent = service1
                 end
             end
         end
@@ -50,7 +74,7 @@ end
 
 -- Reconcile all the DataModels in order of arguments
 while #dataModels > 1 do
-    reconcile(dataModels[#dataModels - 1], table.remove(dataModels, #dataModels))
+    reconcileDataModels(dataModels[#dataModels - 1], table.remove(dataModels, #dataModels))
 end
 
 local dataModel = dataModels[1]
