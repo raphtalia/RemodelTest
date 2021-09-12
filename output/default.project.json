@@ -1,0 +1,19 @@
+{
+    "name": "output",
+    "tree": {
+        "$className": "DataModel",
+
+        "Chat": { "$path": "Chat.rbxm" },
+        "Lighting": { "$path": "Lighting.rbxm" },
+        "ReplicatedFirst": { "$path": "ReplicatedFirst.rbxm" },
+        "ReplicatedStorage": { "$path": "ReplicatedStorage.rbxm" },
+        "ServerScriptService": { "$path": "ServerScriptService.rbxm" },
+        "ServerStorage": { "$path": "ServerStorage.rbxm" },
+        "SoundService": { "$path": "SoundService.rbxm" },
+        "StarterGui": { "$path": "StarterGui.rbxm" },
+        "StarterPack": { "$path": "StarterPack.rbxm" },
+        "StarterPlayer": { "$path": "StarterPlayer.rbxm" },
+        "Teams": { "$path": "Teams.rbxm" },
+        "Workspace": { "$path": "Workspace.rbxm" }
+    }
+}
