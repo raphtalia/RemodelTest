@@ -37,9 +37,11 @@ local function reconcile(dataModel1, dataModel2)
     for _,service1 in ipairs(dataModel1:GetChildren()) do
         local service2 = findFirstChildWhichIsA(dataModel2, service1.ClassName)
 
-        for _,child in ipairs(service2:GetChildren()) do
-            if not service1:FindFirstChild(child.Name) then
-                child.Parent = service1
+        if service2 then
+            for _,child in ipairs(service2:GetChildren()) do
+                if not service1:FindFirstChild(child.Name) then
+                    child.Parent = service1
+                end
             end
         end
     end
