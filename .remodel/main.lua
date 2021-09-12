@@ -26,10 +26,8 @@ for i, placeFile in ipairs(placeFiles) do
 end
 
 -- Reconcile all the DataModels in order of arguments
-if #dataModels > 1 then
-    repeat
-        reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
-    until #dataModels == 1
+while #dataModels > 1 do
+    reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
 end
 
 print("NUM", #dataModels)
