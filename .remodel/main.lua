@@ -1,12 +1,29 @@
---# selene: allow(undefined_variable)
+local success, config = pcall(function()
+    return json.fromString(remodel.readFile("deployment.json"))
+end)
+if not success then
+    error("Could not read deployment.json: " .. config)
+end
 
 local args = {...}
 local branchName = args[1]
 local commitSHA = args[2]
-local assetId = args[3]
-local placeFiles = {select(4, ...)}
+local assetId = config.target
+local dataModels = {}
 
-if #placeFiles == 0 then
+if #config.files > 0 then
+    -- Read the place files into DataModels
+    for i, fileParams in ipairs(config.files) do
+        local path = fileParams.path
+        if remodel.isFile(path) and path:sub(-5) == ".rbxl" then
+            table.insert(dataModels, remodel.readPlaceFile(path))
+        elseif remodel.isDir(path) then
+            local outputPath = i.. ".rbxl"
+            os.execute(("rojo build --output %s %s"):format(outputPath, path))
+            table.insert(dataModels, remodel.readPlaceFile(outputPath))
+        end
+    end
+else
     error("Expected 1 or more file paths")
 end
 
@@ -18,16 +35,6 @@ local function reconcile(dataModel1, dataModel2)
         end
     end
 
-    print("DATAMODEL1 CHILDREN")
-    for _,child in ipairs(dataModel1:GetChildren()) do
-        print(child.Name)
-    end
-
-    print("DATAMODEL2 CHILDREN")
-    for _,child in ipairs(dataModel2:GetChildren()) do
-        print(child.Name)
-    end
-
     for _,service1 in ipairs(dataModel1:GetChildren()) do
         local service2 = dataModel2:FindFirstChildOfClass(service1.ClassName)
 
@@ -37,17 +44,8 @@ local function reconcile(dataModel1, dataModel2)
                     child.Parent = service1
                 end
             end
-        else
-            print("service doesn't exist!", service1.Name)
         end
     end
-end
-
-local dataModels = {}
-
--- Read the place files into DataModels
-for _,placeFile in ipairs(placeFiles) do
-    table.insert(dataModels, remodel.readPlaceFile(placeFile))
 end
 
 -- Reconcile all the DataModels in order of arguments
@@ -56,10 +54,6 @@ while #dataModels > 1 do
 end
 
 local dataModel = dataModels[1]
-
-for _,child in ipairs(dataModel:GetChildren()) do
-    print("child", child.Name)
-end
 
 -- Add commit metadata to the DataModel
 local metadata = Instance.new("ModuleScript")
