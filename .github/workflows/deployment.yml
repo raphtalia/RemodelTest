@@ -24,8 +24,9 @@ jobs:
       run: remodel run .remodel/main.lua
 
     - name: Report tool versions
-      run: remodel --version
-      run: rojo --version
+      run: |
+        remodel --version
+        rojo --version
 
     - name: Deploy
       run: rojo upload --cookie "$ROBLOSECURITY" --asset_id 7463431274 output
