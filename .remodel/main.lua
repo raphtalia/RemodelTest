@@ -6,6 +6,8 @@ local commitSHA = args[2]
 local assetId = args[3]
 local placeFiles = {select(4, ...)}
 
+remodel.writeExistingPlaceAsset(remodel.readPlaceFile(placeFiles[1]), assetId)
+--[==[
 if #placeFiles == 0 then
     error("Expected 1 or more file paths")
 end
@@ -85,3 +87,4 @@ metadata.Parent = dataModel
 
 -- Publish the DataModel to Roblox
 remodel.writeExistingPlaceAsset(dataModel, assetId)
+]==]
