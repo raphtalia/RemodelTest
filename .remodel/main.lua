@@ -18,8 +18,15 @@ print(assetId)
 print("FILES", json.toString(placeFiles))
 
 local function reconcile(dataModel1, dataModel2)
+    -- Create services if DataModel1 is missing services that DataModel2 has
+    for _,service in ipairs(dataModel2:GetChildren()) do
+        if not dataModel1:FindFirstChildWhichIsA(service.ClassName) then
+            Instance.new(service.ClassName).Parent = dataModel1
+        end
+    end
+
     for _,service1 in ipairs(dataModel1:GetChildren()) do
-        local service2 = dataModel2[service1.Name]
+        local service2 = dataModel2:FindFirstChildWhichIsA(service1.ClassName)
 
         for _,child in ipairs(service2:GetChildren()) do
             if not service1:FindFirstChild(child.Name) then
