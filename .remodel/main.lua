@@ -1,5 +1,11 @@
 --# selene: allow(undefined_variable)
 
+local args = {...}
+local branchName = args[1]
+local commitSHA = args[2]
+local assetId = args[3]
+local placeFiles = select(4, ...)
+
 local function reconcile(dataModel1, dataModel2)
     for _,service1 in ipairs(dataModel1:GetChildren()) do
         local service2 = dataModel2[service1.Name]
@@ -12,33 +18,30 @@ local function reconcile(dataModel1, dataModel2)
     end
 end
 
-return function(branchName, commitSHA, assetId, ...)
-    local placeFiles = {...}
-    local dataModels = {}
+local dataModels = {}
 
-    -- Read the place files into DataModels
-    for i, placeFile in ipairs(placeFiles) do
-        dataModels[i] = remodel.readPlaceFile(placeFile)
-    end
-
-    -- Reconcile all the DataModels in order of arguments
-    repeat
-        reconcile(table.remove(dataModels, -1), dataModels[#dataModels])
-    until #dataModels == 1
-
-    local dataModel = dataModels[1]
-
-    -- Add commit metadata to the DataModel
-    local metadata = Instance.new("ModuleScript")
-    metadata.Name = "Github"
-    metadata.Source = [[
-        return {
-            Branch = "]] .. branchName .. [[",
-            Commit = "]] .. commitSHA .. [[",
-        }
-    ]]
-    metadata.Parent = dataModel
-
-    -- Publish the DataModel to Roblox
-    remodel.writeExistingPlaceAsset(dataModel, assetId)
+-- Read the place files into DataModels
+for i, placeFile in ipairs(placeFiles) do
+    dataModels[i] = remodel.readPlaceFile(placeFile)
 end
+
+-- Reconcile all the DataModels in order of arguments
+repeat
+    reconcile(table.remove(dataModels, -1), dataModels[#dataModels])
+until #dataModels == 1
+
+local dataModel = dataModels[1]
+
+-- Add commit metadata to the DataModel
+local metadata = Instance.new("ModuleScript")
+metadata.Name = "Github"
+metadata.Source = [[
+    return {
+        Branch = "]] .. branchName .. [[",
+        Commit = "]] .. commitSHA .. [[",
+    }
+]]
+metadata.Parent = dataModel
+
+-- Publish the DataModel to Roblox
+remodel.writeExistingPlaceAsset(dataModel, assetId)
