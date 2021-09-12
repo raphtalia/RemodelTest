@@ -30,6 +30,6 @@ jobs:
         run: |
           rojo build --output project.rbxl .
           rojo build --output assets.rbxl assets
-          remodel run .remodel/main.lua ${GITHUB_REF#refs/heads/} ${GITHUB_SHA} 7463431274 project.rbxl assets.rbxl
+          remodel run .remodel/main.lua ${GITHUB_REF#refs/heads/} ${GITHUB_SHA} 7463431274 place.rbxl project.rbxl assets.rbxl
         env:
           REMODEL_AUTH: ${{ secrets.ROBLOSECURITY }}
