@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - development
 
 jobs:
   deployment:
@@ -26,7 +27,6 @@ jobs:
           remodel --version
 
       - name: Deploy
-        run: |
-          rojo build --output project.rbxl .
-          rojo build --output assets.rbxl assets
-          remodel run .remodel/main.lua ${GITHUB_REF#refs/heads/} ${GITHUB_SHA} 7463431274 project.rbxl assets.rbxl
+        run: remodel run .remodel/main.lua ${GITHUB_REF#refs/heads/} ${GITHUB_SHA}
+        env:
+          REMODEL_AUTH: ${{ secrets.ROBLOSECURITY }}
