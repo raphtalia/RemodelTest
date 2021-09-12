@@ -6,6 +6,11 @@ local commitSHA = args[2]
 local assetId = args[3]
 local placeFiles = select(4, ...)
 
+print(branchName)
+print(commitSHA)
+print(assetId)
+print(json.toString(placeFiles))
+
 local function reconcile(dataModel1, dataModel2)
     for _,service1 in ipairs(dataModel1:GetChildren()) do
         local service2 = dataModel2[service1.Name]
@@ -25,12 +30,14 @@ for i, placeFile in ipairs(placeFiles) do
     dataModels[i] = remodel.readPlaceFile(placeFile)
 end
 
+print("BEFORE", #dataModels)
+
 -- Reconcile all the DataModels in order of arguments
 while #dataModels > 1 do
     reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
 end
 
-print("NUM", #dataModels)
+print("AFTER", #dataModels)
 
 local dataModel = dataModels[1]
 
