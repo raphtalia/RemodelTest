@@ -40,7 +40,7 @@ metadata.Name = "Github"
 remodel.setRawProperty(
     metadata,
     "Source",
-    "string",
+    "String",
     [[
         return {
             Branch = "]] .. branchName .. [[",
