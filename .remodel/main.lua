@@ -48,7 +48,7 @@ end
 
 local function saveService(serviceName)
     local service = game:GetService(serviceName)
-    remodel.writeModelFile(service, ("Output/%s.rbxm"):format(serviceName))
+    remodel.writeModelFile(service, ("output/%s.rbxm"):format(serviceName))
 end
 
 mapAssets("assets/Workspace", game:GetService("Workspace"))
