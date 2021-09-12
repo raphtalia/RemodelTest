@@ -61,10 +61,10 @@ local function reconcileDataModels(dataModel1, dataModel2)
             for _,child2 in ipairs(service2:GetChildren()) do
                 local child1 = findFirstChildOfClassAndName(service1, child2.ClassName, child2.Name)
                 if child1 then
-                    print(("Child %s exists in both DataModels, reconciling children"):format(child2:GetFullName()))
+                    print(("Reconciling %s from %s and %s"):format(child2:GetFullName(), dataModel1.Name, dataModel2.Name))
                     reconcileChildren(child1, child2)
                 else
-                    print(("Child %s does not exist in DataModel1, copying from DataModel2"):format(child2:GetFullName()))
+                    print(("Copying %s into %s from %s"):format(child2:GetFullName(), dataModel1.Name, dataModel2.Name))
                     child2.Parent = service1
                 end
             end
