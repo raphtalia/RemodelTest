@@ -26,9 +26,11 @@ for i, placeFile in ipairs(placeFiles) do
 end
 
 -- Reconcile all the DataModels in order of arguments
-repeat
-    reconcile(table.remove(dataModels, -1), dataModels[#dataModels])
-until #dataModels == 1
+if #dataModels > 1 then
+    repeat
+        reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
+    until #dataModels == 1
+end
 
 local dataModel = dataModels[1]
 
