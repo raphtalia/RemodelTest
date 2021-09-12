@@ -33,7 +33,7 @@ local dataModels = {}
 
 -- Read the place files into DataModels
 for _,placeFile in ipairs(placeFiles) do
-    table.insert(DataModels, remodel.readPlaceFile(placeFile))
+    table.insert(dataModels, remodel.readPlaceFile(placeFile))
 end
 
 print("BEFORE", #dataModels)
