@@ -10,32 +10,16 @@ if #placeFiles == 0 then
     error("Expected 1 or more file paths")
 end
 
-print("START", #placeFiles)
-
-print(branchName)
-print(commitSHA)
-print(assetId)
-print("FILES", json.toString(placeFiles))
-
-local function findFirstChildWhichIsA(parent, className)
-    for _,child in ipairs(parent:GetChildren()) do
-        if child.ClassName == className then
-            -- Not an exact implementation but similar enough for this use case
-            return child
-        end
-    end
-end
-
 local function reconcile(dataModel1, dataModel2)
     -- Create services if DataModel1 is missing services that DataModel2 has
     for _,service in ipairs(dataModel2:GetChildren()) do
-        if not findFirstChildWhichIsA(dataModel1, service.ClassName) then
+        if not dataModel1:FindFirstChildOfClass(service.ClassName) then
             Instance.new(service.ClassName).Parent = dataModel1
         end
     end
 
     for _,service1 in ipairs(dataModel1:GetChildren()) do
-        local service2 = findFirstChildWhichIsA(dataModel2, service1.ClassName)
+        local service2 = dataModel2:FindFirstChildOfClass(service1.ClassName)
 
         if service2 then
             for _,child in ipairs(service2:GetChildren()) do
@@ -43,6 +27,8 @@ local function reconcile(dataModel1, dataModel2)
                     child.Parent = service1
                 end
             end
+        else
+            print("service doesn't exist!", service1.Name)
         end
     end
 end
@@ -54,16 +40,16 @@ for _,placeFile in ipairs(placeFiles) do
     table.insert(dataModels, remodel.readPlaceFile(placeFile))
 end
 
-print("BEFORE", #dataModels)
-
 -- Reconcile all the DataModels in order of arguments
 while #dataModels > 1 do
     reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
 end
 
-print("AFTER", #dataModels)
-
 local dataModel = dataModels[1]
+
+for _,child in ipairs(dataModel:GetChildren()) do
+    print("child", child.Name)
+end
 
 -- Add commit metadata to the DataModel
 local metadata = Instance.new("ModuleScript")
