@@ -81,7 +81,7 @@ local dataModel = dataModels[1]
 
 -- Add commit metadata to the DataModel
 local metadata = Instance.new("ModuleScript")
-metadata.Name = "Github"
+metadata.Name = "_GithubMetadata"
 remodel.setRawProperty(
     metadata,
     "Source",
@@ -93,7 +93,7 @@ remodel.setRawProperty(
         }
     ]]
 )
-metadata.Parent = dataModel
+metadata.Parent = dataModel:GetService("ReplicatedStorage")
 
 -- Publish the DataModel to Roblox
 remodel.writeExistingPlaceAsset(dataModel, assetId)
