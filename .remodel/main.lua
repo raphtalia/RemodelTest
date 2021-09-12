@@ -37,12 +37,17 @@ local dataModel = dataModels[1]
 -- Add commit metadata to the DataModel
 local metadata = Instance.new("ModuleScript")
 metadata.Name = "Github"
-metadata.Source = [[
-    return {
-        Branch = "]] .. branchName .. [[",
-        Commit = "]] .. commitSHA .. [[",
-    }
-]]
+remodel.setRawProperty(
+    metadata,
+    "Source",
+    "string",
+    [[
+        return {
+            Branch = "]] .. branchName .. [[",
+            Commit = "]] .. commitSHA .. [[",
+        }
+    ]]
+)
 metadata.Parent = dataModel
 
 -- Publish the DataModel to Roblox
