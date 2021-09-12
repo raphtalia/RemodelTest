@@ -19,7 +19,8 @@ print("FILES", json.toString(placeFiles))
 
 local function findFirstChildWhichIsA(parent, className)
     for _,child in ipairs(parent:GetChildren()) do
-        if child:IsA(className) then
+        if child.ClassName == className then
+            -- Not an exact implementation but similar enough for this use case
             return child
         end
     end
