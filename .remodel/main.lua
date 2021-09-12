@@ -18,6 +18,16 @@ local function reconcile(dataModel1, dataModel2)
         end
     end
 
+    print("DATAMODEL1 CHILDREN")
+    for _,child in ipairs(dataModel1:GetChildren()) do
+        print(child.Name)
+    end
+
+    print("DATAMODEL2 CHILDREN")
+    for _,child in ipairs(dataModel2:GetChildren()) do
+        print(child.Name)
+    end
+
     for _,service1 in ipairs(dataModel1:GetChildren()) do
         local service2 = dataModel2:FindFirstChildOfClass(service1.ClassName)
 
