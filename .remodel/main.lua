@@ -11,10 +11,10 @@ if #placeFiles == 0 then
 end
 
 local function reconcile(dataModel1, dataModel2)
-    -- Create services if DataModel1 is missing services that DataModel2 has
+    -- Transfer services if DataModel1 is missing services that DataModel2 has
     for _,service in ipairs(dataModel2:GetChildren()) do
         if not dataModel1:FindFirstChildOfClass(service.ClassName) then
-            Instance.new(service.ClassName).Parent = dataModel1
+            service.Parent = dataModel1
         end
     end
 
