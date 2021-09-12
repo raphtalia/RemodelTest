@@ -52,7 +52,7 @@ end
 
 -- Reconcile all the DataModels in order of arguments
 while #dataModels > 1 do
-    reconcile(table.remove(dataModels, #dataModels), dataModels[#dataModels])
+    reconcile(dataModels[#dataModels - 1], table.remove(dataModels, #dataModels))
 end
 
 local dataModel = dataModels[1]
