@@ -6,8 +6,6 @@ local commitSHA = args[2]
 local assetId = args[3]
 local placeFiles = {select(4, ...)}
 
-remodel.writeExistingPlaceAsset(remodel.readPlaceFile("place.rbxl"), assetId)
---[==[
 if #placeFiles == 0 then
     error("Expected 1 or more file paths")
 end
@@ -67,7 +65,6 @@ print("AFTER", #dataModels)
 
 local dataModel = dataModels[1]
 
---[=[
 -- Add commit metadata to the DataModel
 local metadata = Instance.new("ModuleScript")
 metadata.Name = "Github"
@@ -83,8 +80,6 @@ remodel.setRawProperty(
     ]]
 )
 metadata.Parent = dataModel
-]=]
 
 -- Publish the DataModel to Roblox
 remodel.writeExistingPlaceAsset(dataModel, assetId)
-]==]
