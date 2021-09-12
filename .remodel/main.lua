@@ -35,18 +35,18 @@ local function findFirstChildOfClassAndName(parent, className, name)
     end
 end
 
-local function reconcileChildren(parent1, parent2)
+local function mergeChildren(parent1, parent2)
     for _,child2 in ipairs(parent2:GetChildren()) do
         local child1 = findFirstChildOfClassAndName(parent1, child2.ClassName, child2.Name)
         if child1 then
-            reconcileChildren(child1, child2)
+            mergeChildren(child1, child2)
         else
             child2.Parent = parent1
         end
     end
 end
 
-local function reconcileDataModels(dataModel1, dataModel2)
+local function mergeDataModels(dataModel1, dataModel2)
     -- Transfer services if DataModel1 is missing services that DataModel2 has
     for _,service in ipairs(dataModel2:GetChildren()) do
         if not dataModel1:FindFirstChildOfClass(service.ClassName) then
@@ -61,10 +61,10 @@ local function reconcileDataModels(dataModel1, dataModel2)
             for _,child2 in ipairs(service2:GetChildren()) do
                 local child1 = findFirstChildOfClassAndName(service1, child2.ClassName, child2.Name)
                 if child1 then
-                    print(("Reconciling %s from %s and %s"):format(child2:GetFullName(), dataModel1.Name, dataModel2.Name))
-                    reconcileChildren(child1, child2)
+                    print("Merging", child2:GetFullName())
+                    mergeChildren(child1, child2)
                 else
-                    print(("Copying %s into %s from %s"):format(child2:GetFullName(), dataModel1.Name, dataModel2.Name))
+                    print("Copying", child2:GetFullName())
                     child2.Parent = service1
                 end
             end
@@ -72,9 +72,9 @@ local function reconcileDataModels(dataModel1, dataModel2)
     end
 end
 
--- Reconcile all the DataModels in order of arguments
+-- Merge all the DataModels in order of arguments
 while #dataModels > 1 do
-    reconcileDataModels(dataModels[#dataModels - 1], table.remove(dataModels, #dataModels))
+    mergeDataModels(dataModels[#dataModels - 1], table.remove(dataModels, #dataModels))
 end
 
 local dataModel = dataModels[1]
