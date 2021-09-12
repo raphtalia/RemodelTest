@@ -1,0 +1,11 @@
+{
+    "name": "Assets",
+    "tree": {
+        "$className": "DataModel",
+
+        "Workspace": {
+            "$className": "Workspace",
+            "$path": "Workspace"
+        }
+    }
+}

@@ -1,58 +1,44 @@
-local SAVED_SERVICES = {
-    "Chat",
-    "Lighting",
-    "ReplicatedFirst",
-    "ReplicatedStorage",
-    "ServerScriptService",
-    "ServerStorage",
-    "SoundService",
-    "StarterGui",
-    "StarterPack",
-    "StarterPlayer",
-    "Teams",
-    "Workspace",
-}
+--# selene: allow(undefined_variable)
 
-local game = remodel.readPlaceFile("place.rbxl")
+local function reconcile(dataModel1, dataModel2)
+    for _,service1 in ipairs(dataModel1:GetChildren()) do
+        local service2 = dataModel2[service1.Name]
 
-local function mapAssets(directory, instance, noScripts)
-    for _,v in ipairs(remodel.readDir(directory)) do
-        if remodel.isDir(("%s/%s"):format(directory, v)) then
-            local existingAsset = instance:FindFirstChild(v)
-            if existingAsset then
-                existingAsset:Destroy()
-            end
-
-            local folder = Instance.new("Folder")
-            folder.Name = v
-            folder.Parent = instance
-
-            mapAssets(("%s/%s"):format(directory, v), folder)
-        elseif remodel.isFile(("%s/%s"):format(directory, v)) then
-            for _,asset in ipairs(remodel.readModelFile(("%s/%s"):format(directory, v))) do
-                if not noScripts or not asset:IsA("Script") then
-                    if noScripts then
-                        for _,script in ipairs(asset:GetDescendants()) do
-                            if script:IsA("Script") then
-                                script:Destroy()
-                            end
-                        end
-                    end
-
-                    asset.Parent = instance
-                end
+        for _,child in ipairs(service2:GetChildren()) do
+            if not service1:FindFirstChild(child.Name) then
+                child.Parent = service1
             end
         end
     end
 end
 
-local function saveService(serviceName)
-    local service = game:GetService(serviceName)
-    remodel.writeModelFile(service, ("output/%s.rbxm"):format(serviceName))
-end
+return function(branchName, commitSHA, assetId, ...)
+    local placeFiles = {...}
+    local dataModels = {}
 
-mapAssets("assets/Workspace", game:GetService("Workspace"))
+    -- Read the place files into DataModels
+    for i, placeFile in ipairs(placeFiles) do
+        dataModels[i] = remodel.readPlaceFile(placeFile)
+    end
 
-for _,serviceName in ipairs(SAVED_SERVICES) do
-    saveService(serviceName)
+    -- Reconcile all the DataModels in order of arguments
+    repeat
+        reconcile(table.remove(dataModels, -1), dataModels[#dataModels])
+    until #dataModels == 1
+
+    local dataModel = dataModels[1]
+
+    -- Add commit metadata to the DataModel
+    local metadata = Instance.new("ModuleScript")
+    metadata.Name = "Github"
+    metadata.Source = [[
+        return {
+            Branch = "]] .. branchName .. [[",
+            Commit = "]] .. commitSHA .. [[",
+        }
+    ]]
+    metadata.Parent = dataModel
+
+    -- Publish the DataModel to Roblox
+    remodel.writeExistingPlaceAsset(dataModel, assetId)
 end

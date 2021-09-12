@@ -11,24 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-      with:
-        submodules: true
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
 
-    - uses: Roblox/setup-foreman@v1
-      with:
-        version: "^1.0.0"
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Roblox/setup-foreman@v1
+        with:
+          version: "^1.0.0"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: "Build place file"
-      run: remodel run .remodel/main.lua
+      - name: Report tool versions
+        run: |
+          rojo --version
+          remodel --version
 
-    - name: Report tool versions
-      run: |
-        remodel --version
-        rojo --version
-
-    - name: Deploy
-      run: rojo upload --cookie "$ROBLOSECURITY" --asset_id 7463431274 output
-      env:
-        ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
+      - name: Deploy
+        run: |
+          rojo build --output project.rbxl .
+          rojo build --output assets.rbxl assets
+          remodel run .remodel/main.lua ${ GITHUB_REF#refs/heads/ } ${ GITHUB_SHA } 7463431274 project.rbxl assets.rbxl
