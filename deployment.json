@@ -1,5 +1,11 @@
 {
-    "target": "7463431274",
+    "target": {
+        "main": "7463431274",
+        "development": "7463431274"
+    },
+
+    "includeMetadata": true,
+
     "files": [
         { "path": "place.rbxl" },
         { "path": "." },
