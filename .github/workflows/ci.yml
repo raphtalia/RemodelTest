@@ -17,6 +17,11 @@ jobs:
           repository: raphtalia/Forge
           path: Forge
 
+      - uses: OrbitalOwen/roblox-win-installer-action@1.1
+        with:
+          cookie: ${{ secrets.ROBLOSECURITY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: DamianReeves/write-file-action@v1.0
         with:
           path: foreman.toml
