@@ -39,7 +39,7 @@ jobs:
 
       - uses: leafo/gh-actions-lua@v8
         with:
-          luaVersion: "5.3"
+          luaVersion: "5.1"
 
       - uses: leafo/gh-actions-luarocks@v4
 
