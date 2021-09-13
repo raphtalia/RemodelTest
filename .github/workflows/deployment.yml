@@ -12,9 +12,10 @@ jobs:
         with:
           submodules: recursive
 
-      # - uses: actions/checkout@v2
-      #   with:
-      #     repository: raphtalia/Forge
+      - uses: actions/checkout@v2
+        with:
+          repository: raphtalia/Forge
+          path: Forge
 
       - uses: Roblox/setup-foreman@v1
         with:
