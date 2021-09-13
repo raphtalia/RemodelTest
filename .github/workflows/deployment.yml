@@ -17,7 +17,7 @@ jobs:
           repository: raphtalia/Forge
           path: Forge
 
-      - uses: DamianReeves/write-file-action@v1
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: foreman.toml
           content: |
