@@ -20,7 +20,7 @@ jobs:
       - uses: DamianReeves/write-file-action@v1.0
         with:
           path: foreman.toml
-          content: |
+          contents: |
             [tools]
             rojo = { source = "rojo-rbx/rojo", version = "7.0.0-alpha.4" }
             remodel = { source = "rojo-rbx/remodel", version = "0.9.0" }
