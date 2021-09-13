@@ -15,7 +15,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: raphtalia/Forge
-          ref: development
           path: Forge
 
       - uses: DamianReeves/write-file-action@v1.0
