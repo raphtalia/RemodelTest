@@ -45,6 +45,13 @@ jobs:
       - name: Build
         run: |
           remodel run Forge/build.lua output.rbxl
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: output.rbxl
+          path: output.rbxl
+          retention-days: 3
       
       - name: Test
         run: |
