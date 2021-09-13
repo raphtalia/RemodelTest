@@ -25,6 +25,7 @@ jobs:
             [tools]
             rojo = { source = "rojo-rbx/rojo", version = "7.0.0-alpha.4" }
             remodel = { source = "rojo-rbx/remodel", version = "0.9.0" }
+            run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
           write-mode: overwrite
 
       - uses: Roblox/setup-foreman@v1
@@ -40,6 +41,10 @@ jobs:
       - name: Build
         run: |
           remodel run Forge/build.lua output.rbxl
+      
+      - name: Test
+        run: |
+          run-in-roblox --place output.rbxl --script test.lua
 
       - name: Deploy
         run: |
