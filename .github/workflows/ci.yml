@@ -37,25 +37,23 @@ jobs:
           version: "^1.0.0"
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Report tool versions
-        run: |
-          rojo --version
-          remodel --version
-
       - name: Build
         run: |
           remodel run Forge/build.lua output.rbxl
 
-      - name: Upload Build
+      - name: Build Archival
         uses: actions/upload-artifact@v2
         with:
-          name: output.rbxl
+          name: Output
           path: output.rbxl
           retention-days: 3
-      
+
       - name: Test
-        run: |
-          run-in-roblox --place output.rbxl --script test.lua
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: run-in-roblox --place output.rbxl --script test.lua
 
       - name: Deploy
         run: |
