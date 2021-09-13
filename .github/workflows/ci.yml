@@ -37,6 +37,14 @@ jobs:
           rojo --version
           remodel --version
 
+      - uses: leafo/gh-actions-lua@v8
+        with:
+          luaVersion: "5.3"
+
+      - name: Install dependencies
+        run: |
+          luarocks install luafilesystem
+
       - name: Build
         run: |
           remodel run Forge/build.lua output.rbxl
