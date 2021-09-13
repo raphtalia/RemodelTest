@@ -1,5 +1,7 @@
 name: Selene
+
 on: [push]
+
 jobs:
   lint:
     name: Lint
@@ -7,6 +9,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
+      - uses: DamianReeves/write-file-action
+        with:
+          path: foreman.toml
+          content: |
+            [tools]
+            selene = { source = "Kampfkarren/selene", version = "=0.11.0" }
+          write-mode: overwrite
 
       - uses: Roblox/setup-foreman@v1
         with:
