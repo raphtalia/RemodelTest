@@ -1,10 +1,6 @@
 name: Deployment
 
-on:
-  push:
-    branches:
-      - main
-      - development
+on: [push]
 
 jobs:
   deployment:
@@ -12,9 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
-          submodules: true
+          submodules: recursive
+
+      - uses: actions/checkout@v2
+        with:
+          repository: raphtalia/Forge
+          path: Forge
 
       - uses: Roblox/setup-foreman@v1
         with:
@@ -27,6 +28,7 @@ jobs:
           remodel --version
 
       - name: Deploy
-        run: remodel run .remodel/main.lua ${GITHUB_REF#refs/heads/} ${GITHUB_SHA}
+        run: |
+          remodel run Forge/main.lua
         env:
           REMODEL_AUTH: ${{ secrets.ROBLOSECURITY }}
