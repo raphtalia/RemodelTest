@@ -43,7 +43,7 @@ jobs:
           retention-days: 3
 
       - name: Wait for tests
-        uses: lewagon/wait-on-check-action@v1.0.0
+        uses: lewagon/wait-on-check-action@v1.1.0
         with:
           ref: ${{ github.ref }}
           check-name: 'Test'
@@ -79,11 +79,18 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Wait for build
-        uses: lewagon/wait-on-check-action@v1.0.0
+        uses: lewagon/wait-on-check-action@v1.1.0
         with:
           ref: ${{ github.ref }}
           check-name: 'Build Archival'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: Output
+
+      - name: Extract place file
+        run: 7z x output.rbxl
 
       - name: Test
         uses: nick-invision/retry@v2
