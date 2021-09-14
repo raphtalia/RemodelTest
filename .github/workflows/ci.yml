@@ -2,6 +2,10 @@ name: CI
 
 on: [push]
 
+concurrency:
+  group: ci
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build/Deployment
