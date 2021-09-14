@@ -17,7 +17,7 @@ jobs:
           repository: raphtalia/Forge
           path: Forge
 
-      - uses: DamianReeves/write-file-action@v1.0
+      - uses: DamianReeves/write-file-action@master
         with:
           path: foreman.toml
           contents: |
@@ -43,7 +43,7 @@ jobs:
           retention-days: 3
 
       - name: Wait for tests
-        uses: lewagon/wait-on-check-action@v1.1.0-rc
+        uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.ref }}
           check-name: 'Test'
