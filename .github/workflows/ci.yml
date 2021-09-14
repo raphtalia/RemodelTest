@@ -43,7 +43,7 @@ jobs:
           retention-days: 3
 
       - name: Wait for tests
-        uses: lewagon/wait-on-check-action@v1.1.0
+        uses: lewagon/wait-on-check-action@v1.1.0-rc
         with:
           ref: ${{ github.ref }}
           check-name: 'Test'
@@ -79,7 +79,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Wait for build
-        uses: lewagon/wait-on-check-action@v1.1.0
+        uses: lewagon/wait-on-check-action@v1.1.0-rc
         with:
           ref: ${{ github.ref }}
           check-name: 'Build Archival'
