@@ -90,7 +90,7 @@ jobs:
           name: Output
 
       - name: Extract place file
-        run: 7z x output.rbxl
+        run: 7z x Output
 
       - name: Test
         uses: nick-invision/retry@v2
