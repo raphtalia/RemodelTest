@@ -88,10 +88,12 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: Output
-          path: Output.zip
 
       - name: Debug
-        run: dir
+        run: |
+          dir
+          cd Output
+          dir
 
       - name: Extract place file
         run: 7z x Output.zip output.rbxl
