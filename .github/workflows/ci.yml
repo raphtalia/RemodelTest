@@ -90,6 +90,9 @@ jobs:
           name: Output
           path: Output.zip
 
+      - name: Debug
+        run: dir
+
       - name: Extract place file
         run: 7z x Output.zip output.rbxl
 
