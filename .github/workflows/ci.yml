@@ -46,7 +46,7 @@ jobs:
         uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.ref }}
-          check-name: 'Test'
+          check-name: "Test"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy
@@ -78,12 +78,12 @@ jobs:
           version: "^1.0.0"
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Wait for build
-        uses: lewagon/wait-on-check-action@v1.1.0-rc
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Build Archival'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Wait for build
+      #   uses: lewagon/wait-on-check-action@master
+      #   with:
+      #     ref: ${{ github.ref }}
+      #     check-name: 'Build Archival'
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/download-artifact@v2
         with:
