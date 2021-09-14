@@ -60,6 +60,8 @@ jobs:
     runs-on: windows-2022
 
     steps:
+      - uses: actions/checkout@v2
+
       - uses: OrbitalOwen/roblox-win-installer-action@1.1
         with:
           cookie: ${{ secrets.ROBLOSECURITY }}
