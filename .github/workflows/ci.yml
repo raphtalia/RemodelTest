@@ -79,7 +79,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Wait for build
-        uses: lewagon/wait-on-check-action@master
+        uses: lewagon/wait-on-check-action@v1.1.0-rc
         with:
           ref: ${{ github.ref }}
           check-name: 'Build Archival'
