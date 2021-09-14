@@ -1,8 +1,5 @@
 {
-    "target": {
-        "main": "7463431274",
-        "testez": "7463431274"
-    },
+    "target": "7463431274",
 
     "includeMetadata": true,
 
