@@ -88,9 +88,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: Output
+          path: Output.zip
 
       - name: Extract place file
-        run: 7z x Output
+        run: 7z x Output.zip
 
       - name: Test
         uses: nick-invision/retry@v2
