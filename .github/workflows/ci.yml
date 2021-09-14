@@ -3,9 +3,9 @@ name: CI
 on: [push]
 
 jobs:
-  ci:
-    name: CI
-    runs-on: windows-2022
+  build:
+    name: Build
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -17,11 +17,6 @@ jobs:
           repository: raphtalia/Forge
           path: Forge
 
-      - uses: OrbitalOwen/roblox-win-installer-action@1.1
-        with:
-          cookie: ${{ secrets.ROBLOSECURITY }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: DamianReeves/write-file-action@v1.0
         with:
           path: foreman.toml
@@ -29,7 +24,6 @@ jobs:
             [tools]
             rojo = { source = "rojo-rbx/rojo", version = "7.0.0-alpha.4" }
             remodel = { source = "rojo-rbx/remodel", version = "0.9.0" }
-            run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
           write-mode: overwrite
 
       - uses: Roblox/setup-foreman@v1
@@ -48,15 +42,58 @@ jobs:
           path: output.rbxl
           retention-days: 3
 
-      - name: Test
-        uses: nick-invision/retry@v2
+      - name: Wait for tests
+        uses: lewagon/wait-on-check-action@master
         with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: run-in-roblox --place output.rbxl --script test.lua
+          ref: ${{ github.ref }}
+          check-name: "Test"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy
         run: |
           remodel run Forge/upload.lua output.rbxl
         env:
           REMODEL_AUTH: ${{ secrets.ROBLOSECURITY }}
+
+  test:
+    name: Test
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: OrbitalOwen/roblox-win-installer-action@1.1
+        with:
+          cookie: ${{ secrets.ROBLOSECURITY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: foreman.toml
+          contents: |
+            [tools]
+            run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
+          write-mode: overwrite
+
+      - uses: Roblox/setup-foreman@v1
+        with:
+          version: "^1.0.0"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Wait for build
+      #   uses: lewagon/wait-on-check-action@master
+      #   with:
+      #     ref: ${{ github.ref }}
+      #     check-name: 'Build Archival'
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: Output
+
+      - name: Test
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: run-in-roblox --place output.rbxl --script test.lua
