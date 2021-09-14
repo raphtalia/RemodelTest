@@ -17,7 +17,7 @@ jobs:
           repository: raphtalia/Forge
           path: Forge
 
-      - uses: DamianReeves/write-file-action@master
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: foreman.toml
           contents: |
@@ -79,7 +79,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Wait for build
-        uses: lewagon/wait-on-check-action@v1.1.0-rc
+        uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.ref }}
           check-name: 'Build Archival'
